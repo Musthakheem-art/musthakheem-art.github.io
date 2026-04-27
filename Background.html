@@ -1,95 +1,454 @@
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>For You ✨</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: radial-gradient(circle, #0b0c2a, #000);
-      color: white;
-      text-align: center;
-      font-family: Arial;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keerthana's Birthday</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Cormorant Garamond', serif; overflow-x: hidden; }
 
-    h1 {
-      position: absolute;
-      top: 35%;
-      width: 100%;
-      font-size: 28px;
-    }
+  /* ===== PAGE 1: NASA SKY ===== */
+  #page1 {
+    min-height: 100vh;
+    background: radial-gradient(ellipse at 55% 45%, #0d1b35 0%, #060e1f 55%, #020810 100%);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
 
-    button {
-      position: absolute;
-      top: 55%;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      border-radius: 20px;
-      background: #ffffff;
-      color: black;
-      cursor: pointer;
-    }
+  #starCanvas {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+  }
 
-    canvas {
-      display: block;
-    }
-  </style>
+  .nebula {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px); pointer-events: none;
+  }
+  .n1 { width: 500px; height: 300px; background: #1a2a5e; opacity: 0.22; top: -80px; left: -120px; }
+  .n2 { width: 400px; height: 280px; background: #0d2244; opacity: 0.18; bottom: -80px; right: -80px; }
+
+  .heading-wrap {
+    position: relative; z-index: 2;
+    text-align: center; padding: 0 24px;
+  }
+
+  .main-heading {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(1.7rem, 5vw, 3.4rem);
+    font-weight: 700;
+    color: #cdd8f0;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+    text-shadow: 0 0 28px rgba(140,165,230,0.2);
+    animation: fadeUp 1.4s ease both 0.2s;
+  }
+
+  .music-sym {
+    color: #b8a46a;
+    font-size: 1em;
+    display: inline-block;
+    vertical-align: baseline;
+    animation: softGlow 3.2s ease-in-out infinite;
+  }
+
+  .click-btn {
+    margin-top: 50px;
+    position: relative; z-index: 2;
+    background: transparent;
+    border: 1px solid rgba(184,164,106,0.5);
+    color: #b8a46a;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.32em;
+    padding: 13px 38px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    animation: fadeUp 1.4s ease both 0.7s;
+    text-transform: uppercase;
+  }
+  .click-btn:hover {
+    background: rgba(184,164,106,0.07);
+    border-color: rgba(184,164,106,0.8);
+    box-shadow: 0 0 16px rgba(184,164,106,0.12);
+  }
+
+  .shoot {
+    position: absolute; width: 2px; height: 2px;
+    background: rgba(255,255,255,0.75); border-radius: 50%;
+    animation: shoot linear infinite; opacity: 0;
+  }
+  @keyframes shoot {
+    0%   { opacity:0; transform:translate(0,0) scaleX(1); }
+    5%   { opacity:0.6; }
+    85%  { opacity:0.4; }
+    100% { opacity:0; transform:translate(320px,165px) scaleX(55); }
+  }
+
+  /* ===== PAGE 2: CAKE ===== */
+  #page2 {
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 40%, #180e2a 0%, #0e0818 50%, #07040e 100%);
+  }
+  #page2.active { display: flex; }
+
+  .bg-glow {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); pointer-events: none;
+    animation: floatG 7s ease-in-out infinite alternate;
+  }
+  @keyframes floatG { from{transform:translateY(0);} to{transform:translateY(-16px);} }
+
+  #confettiCanvas {
+    position: fixed; top:0; left:0;
+    width:100%; height:100%;
+    pointer-events:none; z-index:999; display:none;
+  }
+
+  .cake-scene {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column;
+    align-items: center;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  .cake-svg-wrap {
+    filter: drop-shadow(0 5px 24px rgba(100,70,140,0.28));
+  }
+
+  .wish-btn {
+    margin-top: 40px;
+    background: transparent;
+    border: 1px solid rgba(160,130,200,0.45);
+    color: #b89ee0;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.28em;
+    padding: 14px 44px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+  }
+  .wish-btn:hover {
+    background: rgba(160,130,200,0.09);
+    border-color: rgba(160,130,200,0.85);
+    box-shadow: 0 0 20px rgba(160,130,200,0.18);
+  }
+
+  .fl  { animation: flicker 0.65s ease-in-out infinite alternate;   transform-origin: bottom center; }
+  .fl2 { animation: flicker 0.9s  ease-in-out infinite alternate 0.15s; transform-origin: bottom center; }
+  .fl3 { animation: flicker 0.5s  ease-in-out infinite alternate 0.3s;  transform-origin: bottom center; }
+  @keyframes flicker {
+    0%   { opacity:1;   transform:scaleY(1)    skewX(0deg); }
+    45%  { opacity:0.8; transform:scaleY(0.93) skewX(2deg); }
+    100% { opacity:1;   transform:scaleY(1.04) skewX(-1deg); }
+  }
+
+  /* ===== PAGE 3: OCEAN ===== */
+  #page3 {
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #010c1a 0%, #041830 35%, #062540 60%, #083050 100%);
+  }
+  #page3.active { display: flex; }
+
+  .wave-layer {
+    position: absolute; bottom:0; width:200%; height:155px;
+    border-radius:40%; animation:waveMove linear infinite;
+  }
+  .w1 { background:rgba(8,45,82,0.32);  animation-duration:9s;  bottom:-30px; }
+  .w2 { background:rgba(4,36,68,0.22);  animation-duration:13s; bottom:10px; animation-direction:reverse; }
+  .w3 { background:rgba(0,55,90,0.14);  animation-duration:7s;  bottom:-50px; }
+  @keyframes waveMove {
+    0%   { transform:translateX(0) rotate(0deg); }
+    100% { transform:translateX(-50%) rotate(1.5deg); }
+  }
+
+  .sea-glow {
+    position: absolute; border-radius:50%;
+    filter:blur(60px); pointer-events:none;
+    animation:seaPulse 5s ease-in-out infinite alternate;
+  }
+  @keyframes seaPulse {
+    from { opacity:0.04; transform:scale(1); }
+    to   { opacity:0.12; transform:scale(1.18); }
+  }
+
+  .ocean-msg {
+    position: relative; z-index:5;
+    text-align:center; padding:0 28px;
+  }
+
+  .intro-text {
+    font-family:'Cormorant Garamond',serif;
+    font-size: clamp(1.25rem,3.8vw,2.1rem);
+    font-style:italic;
+    color:rgba(190,220,240,0.78);
+    opacity:0;
+    animation:fadeIn 1.6s ease forwards 0.5s;
+    line-height:1.75;
+    text-shadow:0 0 28px rgba(0,120,170,0.25);
+  }
+
+  .hbd-langs {
+    display:none; flex-direction:column;
+    align-items:center; gap:11px;
+  }
+
+  .hbd-line {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.15rem,3vw,1.85rem);
+    font-style:italic;
+    color:rgba(175,215,235,0.85);
+    opacity:0; transform:translateY(14px);
+    animation:lineReveal 0.7s ease forwards;
+    letter-spacing:0.03em;
+    text-shadow:0 0 18px rgba(0,140,180,0.18);
+  }
+
+  .praise-line {
+    margin-top:30px;
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(0.92rem,2.1vw,1.2rem);
+    font-style:italic;
+    color:rgba(130,180,210,0.6);
+    line-height:1.9; text-align:center;
+    opacity:0; display:none;
+    animation:fadeIn 1.8s ease forwards;
+    letter-spacing:0.02em;
+  }
+
+  @keyframes fadeUp     { from{opacity:0;transform:translateY(24px);}  to{opacity:1;transform:translateY(0);} }
+  @keyframes fadeIn     { from{opacity:0;} to{opacity:1;} }
+  @keyframes lineReveal { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes softGlow   {
+    0%,100%{text-shadow:0 0 6px rgba(184,164,106,0.25);}
+    50%    {text-shadow:0 0 16px rgba(184,164,106,0.55);}
+  }
+</style>
 </head>
 <body>
 
-<h1>✨ Not a great gift but made with effort ✨</h1>
+<canvas id="confettiCanvas"></canvas>
 
-<button onclick="goNext()">Let's go ✨</button>
+<!-- PAGE 1 -->
+<section id="page1">
+  <canvas id="starCanvas"></canvas>
+  <div class="nebula n1"></div>
+  <div class="nebula n2"></div>
+  <div class="shoot" style="top:8%;left:12%;animation-duration:5s;animation-delay:0s;"></div>
+  <div class="shoot" style="top:22%;left:68%;animation-duration:7s;animation-delay:2.5s;"></div>
+  <div class="shoot" style="top:52%;left:4%;animation-duration:6s;animation-delay:4.2s;"></div>
 
-<canvas id="stars"></canvas>
+  <div class="heading-wrap">
+    <h1 class="main-heading">Keerthana<span class="music-sym">♪</span>s Birthday</h1>
+  </div>
+  <button class="click-btn" onclick="goToCake()">Click Me</button>
+</section>
+
+<!-- PAGE 2: CAKE -->
+<section id="page2">
+  <div class="bg-glow" style="width:380px;height:380px;background:#200c3c;opacity:0.16;top:-140px;left:-90px;"></div>
+  <div class="bg-glow" style="width:320px;height:320px;background:#160730;opacity:0.13;bottom:-110px;right:-70px;animation-delay:2s;"></div>
+
+  <div class="cake-scene">
+    <div class="cake-svg-wrap">
+      <svg width="270" height="310" viewBox="0 0 270 310" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- Bottom tier -->
+        <rect x="15" y="215" width="240" height="72" rx="9" fill="#251535"/>
+        <rect x="15" y="215" width="240" height="13" rx="7" fill="#301d44"/>
+        <ellipse cx="44"  cy="216" rx="12" ry="8"  fill="#eee8f8" opacity="0.7"/>
+        <ellipse cx="82"  cy="213" rx="13" ry="9"  fill="#eee8f8" opacity="0.7"/>
+        <ellipse cx="122" cy="215" rx="12" ry="8"  fill="#eee8f8" opacity="0.7"/>
+        <ellipse cx="162" cy="213" rx="13" ry="9"  fill="#eee8f8" opacity="0.7"/>
+        <ellipse cx="200" cy="215" rx="12" ry="8"  fill="#eee8f8" opacity="0.7"/>
+        <ellipse cx="234" cy="214" rx="11" ry="8"  fill="#eee8f8" opacity="0.7"/>
+        <circle cx="65"  cy="253" r="4" fill="#5a3278" opacity="0.55"/>
+        <circle cx="105" cy="248" r="4" fill="#7a4a98" opacity="0.55"/>
+        <circle cx="145" cy="253" r="4" fill="#5a3278" opacity="0.55"/>
+        <circle cx="185" cy="248" r="4" fill="#7a4a98" opacity="0.55"/>
+        <circle cx="220" cy="253" r="4" fill="#5a3278" opacity="0.55"/>
+
+        <!-- Middle tier -->
+        <rect x="44" y="148" width="182" height="69" rx="8" fill="#1c1030"/>
+        <rect x="44" y="148" width="182" height="12" rx="6" fill="#281840"/>
+        <ellipse cx="67"  cy="149" rx="10" ry="7" fill="#e8e0f4" opacity="0.65"/>
+        <ellipse cx="100" cy="146" rx="11" ry="7" fill="#e8e0f4" opacity="0.65"/>
+        <ellipse cx="135" cy="148" rx="10" ry="7" fill="#e8e0f4" opacity="0.65"/>
+        <ellipse cx="168" cy="146" rx="11" ry="7" fill="#e8e0f4" opacity="0.65"/>
+        <ellipse cx="200" cy="148" rx="10" ry="7" fill="#e8e0f4" opacity="0.65"/>
+        <text x="135" y="192" text-anchor="middle" fill="rgba(190,170,220,0.42)" font-size="10" font-family="Cormorant Garamond,serif" font-style="italic">Happy Birthday</text>
+
+        <!-- Top tier -->
+        <rect x="78" y="92" width="114" height="58" rx="8" fill="#160c24"/>
+        <rect x="78" y="92" width="114" height="11" rx="6" fill="#221438"/>
+        <ellipse cx="96"  cy="93"  rx="10" ry="7" fill="#e4ddf0" opacity="0.65"/>
+        <ellipse cx="123" cy="90"  rx="11" ry="7" fill="#e4ddf0" opacity="0.65"/>
+        <ellipse cx="151" cy="92"  rx="10" ry="7" fill="#e4ddf0" opacity="0.65"/>
+        <ellipse cx="176" cy="91"  rx="10" ry="7" fill="#e4ddf0" opacity="0.65"/>
+
+        <!-- Candle L -->
+        <rect x="96" y="58" width="9" height="36" rx="3" fill="#ddd5ee" opacity="0.8"/>
+        <g class="fl" id="flame1">
+          <ellipse cx="100.5" cy="51" rx="4.5" ry="8"   fill="#b8833a" opacity="0.82"/>
+          <ellipse cx="100.5" cy="49" rx="2.8" ry="5.5" fill="#d6a445" opacity="0.88"/>
+          <ellipse cx="100.5" cy="47" rx="1.4" ry="3"   fill="#fff5d8" opacity="0.68"/>
+        </g>
+
+        <!-- Candle C -->
+        <rect x="130" y="52" width="9" height="42" rx="3" fill="#ccc4e0" opacity="0.8"/>
+        <g class="fl2" id="flame2">
+          <ellipse cx="134.5" cy="44" rx="5"   ry="8.5" fill="#b8833a" opacity="0.82"/>
+          <ellipse cx="134.5" cy="42" rx="3"   ry="6"   fill="#d6a445" opacity="0.88"/>
+          <ellipse cx="134.5" cy="40" rx="1.5" ry="3.5" fill="#fff5d8" opacity="0.68"/>
+        </g>
+
+        <!-- Candle R -->
+        <rect x="163" y="58" width="9" height="36" rx="3" fill="#ddd5ee" opacity="0.8"/>
+        <g class="fl3" id="flame3">
+          <ellipse cx="167.5" cy="51" rx="4.5" ry="8"   fill="#b8833a" opacity="0.82"/>
+          <ellipse cx="167.5" cy="49" rx="2.8" ry="5.5" fill="#d6a445" opacity="0.88"/>
+          <ellipse cx="167.5" cy="47" rx="1.4" ry="3"   fill="#fff5d8" opacity="0.68"/>
+        </g>
+
+        <!-- Plate shadow -->
+        <ellipse cx="135" cy="290" rx="118" ry="12" fill="#120a20" opacity="0.38"/>
+      </svg>
+    </div>
+    <button class="wish-btn" id="wishBtn" onclick="blowCandles()">Make a Wish</button>
+  </div>
+</section>
+
+<!-- PAGE 3: OCEAN -->
+<section id="page3">
+  <div class="wave-layer w1"></div>
+  <div class="wave-layer w2"></div>
+  <div class="wave-layer w3"></div>
+  <div class="sea-glow" style="width:340px;height:340px;background:#004060;top:12%;left:2%;animation-delay:0s;"></div>
+  <div class="sea-glow" style="width:260px;height:260px;background:#003555;bottom:18%;right:5%;animation-delay:2s;"></div>
+  <div class="sea-glow" style="width:190px;height:190px;background:#004e6a;top:55%;left:42%;animation-delay:1s;"></div>
+
+  <div class="ocean-msg">
+    <p class="intro-text" id="introText">
+      I don't know about me,<br>but you're turning 18
+    </p>
+    <div class="hbd-langs" id="hbdLangs"></div>
+    <p class="praise-line" id="praiseLine">
+      Keerthana, you carry a rare kind of grace —<br>
+      the kind that makes everyone around you feel seen and cherished.
+    </p>
+  </div>
+</section>
 
 <script>
-function goNext() {
-  window.location.href = "message.html";
+// STARS
+(function(){
+  const c=document.getElementById('starCanvas'), ctx=c.getContext('2d');
+  let s=[];
+  function resize(){ c.width=innerWidth; c.height=innerHeight; s=[];
+    for(let i=0;i<200;i++) s.push({x:Math.random()*c.width,y:Math.random()*c.height,
+      r:Math.random()*1.7+0.2,a:Math.random()*0.65+0.15,
+      sp:Math.random()*0.012+0.004,ph:Math.random()*Math.PI*2}); }
+  function draw(){ ctx.clearRect(0,0,c.width,c.height); const t=Date.now()*0.001;
+    s.forEach(p=>{ const a=p.a*(0.5+0.5*Math.sin(t*p.sp*10+p.ph));
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='#fff'; ctx.globalAlpha=a; ctx.fill(); });
+    ctx.globalAlpha=1; requestAnimationFrame(draw); }
+  resize(); draw(); window.addEventListener('resize',resize);
+})();
+
+// CONFETTI
+const cc=document.getElementById('confettiCanvas'), cctx=cc.getContext('2d');
+let pieces=[];
+function rsCC(){ cc.width=innerWidth; cc.height=innerHeight; }
+rsCC(); window.addEventListener('resize',rsCC);
+function spawnC(){ for(let i=0;i<130;i++) pieces.push({
+  x:Math.random()*cc.width, y:Math.random()*cc.height-cc.height,
+  w:Math.random()*9+5, h:Math.random()*5+3,
+  color:`hsl(${Math.random()*360},55%,62%)`,
+  vx:(Math.random()-0.5)*3, vy:Math.random()*3+1.5,
+  angle:Math.random()*Math.PI*2, spin:(Math.random()-0.5)*0.16, life:1 }); }
+function drawC(){ cctx.clearRect(0,0,cc.width,cc.height);
+  pieces=pieces.filter(p=>p.life>0);
+  pieces.forEach(p=>{ cctx.save(); cctx.translate(p.x,p.y); cctx.rotate(p.angle);
+    cctx.globalAlpha=p.life; cctx.fillStyle=p.color;
+    cctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); cctx.restore();
+    p.x+=p.vx; p.y+=p.vy; p.angle+=p.spin; p.vy+=0.07;
+    if(p.y>cc.height) p.life-=0.04; });
+  if(pieces.length>0) requestAnimationFrame(drawC); else cc.style.display='none'; }
+function startConfetti(){ cc.style.display='block'; pieces=[]; spawnC(); drawC();
+  const iv=setInterval(()=>{ if(pieces.length<55){clearInterval(iv);return;} spawnC(); },1800);
+  setTimeout(()=>clearInterval(iv),5000); }
+
+function goToCake(){
+  document.getElementById('page1').style.display='none';
+  document.getElementById('page2').classList.add('active');
 }
 
-// stars
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let stars = [];
-
-for (let i = 0; i < 300; i++) {
-  stars.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: Math.random() * 1.5,
-    s: Math.random() * 0.5
+function blowCandles(){
+  ['flame1','flame2','flame3'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.style.transition='all 0.45s ease'; el.style.opacity='0'; el.style.transform='scaleY(0)';
   });
+  const btn=document.getElementById('wishBtn');
+  btn.textContent='Wish Made ✨'; btn.disabled=true;
+  startConfetti();
+  setTimeout(()=>{
+    document.getElementById('page2').classList.remove('active');
+    document.getElementById('page3').classList.add('active');
+    oceanSeq();
+  },3000);
 }
 
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+const langs=[
+  'ଜନ୍ମଦିନ ଶୁଭେଚ୍ଛା!',
+  'जन्मदिन मुबारक हो!',
+  'జన్మదిన శుభాకాంక్షలు!',
+  'Happy Birthday!',
+  'பிறந்தநாள் வாழ்த்துகள்!',
+  'ಹುಟ್ಟುಹಬ್ಬದ ಶುಭಾಶಯಗಳು!',
+  'ജന്മദിനാശംസകൾ!'
+];
 
-  stars.forEach(star => {
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-    ctx.fillStyle = "white";
-    ctx.fill();
-
-    star.y += star.s;
-    if (star.y > canvas.height) {
-      star.y = 0;
-      star.x = Math.random() * canvas.width;
-    }
-  });
-
-  requestAnimationFrame(draw);
+function oceanSeq(){
+  const intro=document.getElementById('introText');
+  const ld=document.getElementById('hbdLangs');
+  const pl=document.getElementById('praiseLine');
+  setTimeout(()=>{
+    intro.style.transition='opacity 1s ease'; intro.style.opacity='0';
+    setTimeout(()=>{
+      intro.style.display='none'; ld.style.display='flex';
+      langs.forEach((t,i)=>{
+        const d=document.createElement('div'); d.className='hbd-line';
+        d.textContent=t; d.style.animationDelay=`${i*0.6}s`; ld.appendChild(d);
+      });
+      setTimeout(()=>{ pl.style.display='block'; }, langs.length*600+700);
+    },1000);
+  },3800);
 }
-
-draw();
 </script>
-
 </body>
 </html>
